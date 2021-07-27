@@ -1,5 +1,5 @@
 import React,{useState, useCallback} from 'react'
-import {TextInput} from '../components/Uikit'
+import {TextInput, PrimaryButton} from '../components/Uikit'
 import '../assets/reset.css'
 import '../assets/style.css'
 
@@ -70,6 +70,9 @@ const inputConfirmPassword = useCallback((event) => {
                             type={"text"}
                             onChange={inputConfirmPassword}
              />
+             <div className="center">
+                 <PrimaryButton label={"Create Account"} onClick={()=> console.log("Clicked")} />
+             </div>
         </div>
     )
 }
