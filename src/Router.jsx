@@ -1,14 +1,13 @@
 import React from 'react'
-import { Switch, Route, BrowserRouter } from 'react-router-dom'
-import {SignUp} from './templates'
+import { Switch, Route, BrowserRouter } from 'react-router'
+import {Home, SignUp} from './templates'
 
 const Router = () => {
     return (
-        <BrowserRouter>
             <Switch>
                 <Route exact path={"/signup"} component={SignUp} />
+                <Route exact path={"(/)?"} component={Home} />
             </Switch>
-        </BrowserRouter>
     )
 }
 

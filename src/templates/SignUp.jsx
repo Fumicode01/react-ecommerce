@@ -1,9 +1,13 @@
 import React,{useState, useCallback} from 'react'
+import { useDispatch } from 'react-redux'
 import {TextInput, PrimaryButton} from '../components/Uikit'
+import {signUp} from '../redux/users/operations'
 import '../assets/reset.css'
 import '../assets/style.css'
 
 const SignUp = () => {
+    const dispatch = useDispatch()
+
     const [username, setUsername] = useState(""),
               [email, setEmail] = useState(""),
               [password, setPassword] = useState(""),
@@ -67,11 +71,11 @@ const inputConfirmPassword = useCallback((event) => {
                             required={true}
                             rows={1}
                             value={confirmPassword}
-                            type={"text"}
+                            type={"password"}
                             onChange={inputConfirmPassword}
              />
              <div className="center">
-                 <PrimaryButton label={"Create Account"} onClick={()=> console.log("Clicked")} />
+                 <PrimaryButton label={"Create Account"} onClick={()=> dispatch(signUp(username, email, password, confirmPassword))} />
              </div>
         </div>
     )
