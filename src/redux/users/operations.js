@@ -3,6 +3,38 @@ import {push} from 'connected-react-router'
 import {auth, db, FirebaseTimestamp} from '../../firebase/index'
 
 
+
+export const signIn = (email, password) => {
+    return async (dispatch) => {
+         //Validation
+         if (email === "" || password === ""){
+            alert ("Please fill in the form.")
+            return false
+        }
+        auth.signInWithEmailAndPassword(email, password)
+        .then(result => {
+            const user = result.user
+
+            if(user){
+                const uid = user.uid
+                
+                db.collection('users').doc(uid).get()
+                .then(snapshot => {
+                    const data = snapshot.data()
+                    dispatch(signInAction({
+                        isSignedIn:true,
+                        role: data.role,
+                        uid:uid,
+                        username:data.username
+                    }))
+                    dispatch(push('/'))
+                })
+            }
+        })
+    }
+}
+
+
 export const signUp = (username, email, password, confirmPassword) => {
     return async (dispatch) =>{
         //Validation
