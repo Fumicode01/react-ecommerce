@@ -3,6 +3,24 @@ import {push} from 'connected-react-router'
 import {auth, db, FirebaseTimestamp} from '../../firebase/index'
 
 
+
+export const resetPassword = (email) => {
+    return async (dispatch) => {
+        if(email === "") {
+            alert ("Please fill in the form.")
+            return false
+        } else {
+            auth.sendPasswordResetEmail(email)
+            .then(() => {
+                alert ("The reset password email has been sent to your email.")
+                dispatch(push('/signin'))
+            }).catch(() => {
+                alert ("Fail to reset your password.")
+            })
+        }
+    }
+}
+
 export const llistenAuthState = () => {
     return async (dispatch) =>{
         return auth.onAuthStateChanged(user =>{
