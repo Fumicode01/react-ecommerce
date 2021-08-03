@@ -2,6 +2,7 @@ import React,{useState, useCallback} from 'react'
 import { useDispatch } from 'react-redux'
 import {TextInput, PrimaryButton} from '../components/Uikit'
 import {signUp} from '../redux/users/operations'
+import { push } from 'connected-react-router'
 import '../assets/reset.css'
 import '../assets/style.css'
 
@@ -74,8 +75,13 @@ const inputConfirmPassword = useCallback((event) => {
                             type={"password"}
                             onChange={inputConfirmPassword}
              />
+            <div className="module-spacer--medium" />
+
              <div className="center">
                  <PrimaryButton label={"Create Account"} onClick={()=> dispatch(signUp(username, email, password, confirmPassword))} />
+                <div className="module-spacer--medium" />
+
+                 <p onClick={() => dispatch(push('/signin'))}>Already have your account?</p>
              </div>
         </div>
     )
