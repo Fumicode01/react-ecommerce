@@ -3,6 +3,7 @@ import { IconButton } from '@material-ui/core'
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 import { makeStyles } from '@material-ui/styles';
 import {storage} from "../../firebase/index"
+import ImagePreview from './ImagePreview';
 
 
 const useStyles = makeStyles({
@@ -33,16 +34,24 @@ const ImageArea = (props) => {
         })
     }, [props.setImages])
     return (
-        <div className="u-text-right">
-            <span>Upload Images</span>
-            <IconButton className={classes.icon}>
-                <label>
-                    <AddPhotoAlternateIcon />
-                    <input className="u-display-none" type="file" id="image" 
-                                onChange={(event) => uploadImage(event)}/>
-                </label>
-            </IconButton>
+        <div>
+            <div className="p-grid__list-images">
+                {props.images.length > 0 && (
+                    props.images.map(image => <ImagePreview path={image.path} key={image.id} id={image.id} />)
+                )}
+            </div>
+            <div className="u-text-right">
+                <span>Upload Images</span>
+                <IconButton className={classes.icon}>
+                    <label>
+                        <AddPhotoAlternateIcon />
+                        <input className="u-display-none" type="file" id="image" 
+                                    onChange={(event) => uploadImage(event)}/>
+                    </label>
+                </IconButton>
+            </div>
         </div>
+        
         
     )
 }
