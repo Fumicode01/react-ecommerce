@@ -1,7 +1,11 @@
 import React, {useState, useCallback} from 'react'
+import { useDispatch } from 'react-redux';
 import { TextInput, SelectBox, PrimaryButton } from '../components/Uikit'
+import { saveProduct } from '../redux/products/actions';
 
 const ProductEdit = () => {
+
+    const dispatch = useDispatch();
 
     const [name, setName] = useState(""),
               [description, setDescription] = useState(""),
@@ -65,6 +69,7 @@ const ProductEdit = () => {
             <div className="center">
                 <PrimaryButton 
                     label={"Submit"}
+                    onClick = {()=> dispatch(saveProduct(name, description, category, gender, price))}
                 />
             </div>
         </section>
