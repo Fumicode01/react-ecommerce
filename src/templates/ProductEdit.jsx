@@ -1,12 +1,16 @@
-import React, {useState, useCallback} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import { useDispatch } from 'react-redux';
 import ImageArea from '../components/Products/ImageArea';
 import { TextInput, SelectBox, PrimaryButton } from '../components/Uikit'
 import { saveProduct } from '../redux/products/actions';
+import {db} from '../firebase/index'
 
 const ProductEdit = () => {
-
     const dispatch = useDispatch();
+    let id = window.location.pathname.split('/product/edit')[1];
+    if(id !== ""){
+        id = id.split('/')[1];
+    }
 
     const [name, setName] = useState(""),
               [description, setDescription] = useState(""),
@@ -40,8 +44,22 @@ const ProductEdit = () => {
         {id:"men", name:"Men"},
         {id:"wemen", name:"Wemen"},
         {id:"Unisex", name:"Unisex"},
-
     ]
+
+    useEffect(() => {
+        if(id !==""){
+            db.collection('products').doc(id).get()
+                .then(snapshot => {
+                    const data = snapshot.data()
+                    setName(data.name);
+                    setImages(data.images);
+                    setDescription(data.description);
+                    setCategory(data.category);
+                    setPrice(data.price);
+                    setGender(data.gender);
+                })
+        }
+        }, [id])
 
     return (
         <section>
@@ -72,7 +90,7 @@ const ProductEdit = () => {
             <div className="center">
                 <PrimaryButton 
                     label={"Submit"}
-                    onClick = {()=> dispatch(saveProduct(name, description, category, gender, price, images))}
+                    onClick = {()=> dispatch(saveProduct(id, name, description, category, gender, price, images))}
                 />
             </div>
         </section>
