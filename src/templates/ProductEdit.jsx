@@ -1,6 +1,6 @@
 import React, {useState, useCallback, useEffect} from 'react'
 import { useDispatch } from 'react-redux';
-import ImageArea from '../components/Products/ImageArea';
+import {ImageArea, SetSizeArea} from '../components/Products';
 import { TextInput, SelectBox, PrimaryButton } from '../components/Uikit'
 import { saveProduct } from '../redux/products/actions';
 import {db} from '../firebase/index'
@@ -17,7 +17,8 @@ const ProductEdit = () => {
               [category, setCategory] = useState(""),
               [gender, setGender] = useState(""),
               [price, setPrice] = useState(""),
-              [images, setImages] = useState([]);
+              [images, setImages] = useState([]),
+              [sizes, setSizes] = useState([]);
 
     const InputName = useCallback((event) => {
             setName(event.target.value)
@@ -32,6 +33,8 @@ const ProductEdit = () => {
         setPrice(event.target.value)
     }, [setPrice],
     )
+
+    
 
     const categories = [
         {id:"tops", name:"Tops"},
@@ -57,6 +60,7 @@ const ProductEdit = () => {
                     setCategory(data.category);
                     setPrice(data.price);
                     setGender(data.gender);
+                    setSizes(data.sizes);
                 })
         }
         }, [id])
@@ -85,13 +89,17 @@ const ProductEdit = () => {
                 <SelectBox 
                     label={"Gender"} required={true} options={genders} value={gender} select={setGender}
                 />
-            </div>
-            <div className="module-spacer--medium" />
-            <div className="center">
-                <PrimaryButton 
-                    label={"Submit"}
-                    onClick = {()=> dispatch(saveProduct(id, name, description, category, gender, price, images))}
-                />
+
+                <div className="module-spacer--small" />
+                <SetSizeArea sizes={sizes} setSizes={setSizes}/>
+                <div className="module-spacer--small" />
+
+                <div className="center">
+                    <PrimaryButton 
+                        label={"Submit"}
+                        onClick = {()=> dispatch(saveProduct(id, name, description, category, gender, price, images, sizes))}
+                    />
+                </div>
             </div>
         </section>
     )
