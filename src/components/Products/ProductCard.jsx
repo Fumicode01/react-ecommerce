@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {push} from "connected-react-router"
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -65,10 +65,21 @@ const useStyles = makeStyles((theme) => ({
 
 
 const ProductCard = (props) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch();    
     const price = props.price.toLocaleString();
     const classes = useStyles();
     const images = (props.images.length > 0) ? props.images : [{path:NoImage}];
+
+    const [anchorEl, setAnchorEl] = useState(null)
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget)
+    }
+
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
+
     return (
         <Card className={classes.root}>
             <CardMedia 
@@ -85,6 +96,31 @@ const ProductCard = (props) => {
                         ${price}
                     </Typography>
                  </div>
+                 <IconButton onClick = {handleClick}>
+                     <MoreVertIcon />
+                 </IconButton>
+                 <Menu
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                    >
+                        <MenuItem 
+                            onClick={()=> dispatch(push('/product/edit/' + props.id))}
+                            onClose={handleClose}
+                            >
+                            Edit
+                        </MenuItem>
+                        <MenuItem
+                            onClick={()=> {
+                                dispatch(deleteProduct(props.id));
+                                handleClose()}}
+                            
+                            >
+                            Delete
+                        </MenuItem>
+
+                 </Menu>
                 
             </CardContent>
             
