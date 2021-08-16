@@ -21,7 +21,7 @@ export const resetPassword = (email) => {
     }
 }
 
-export const llistenAuthState = () => {
+export const listenAuthState = () => {
     return async (dispatch) =>{
         return auth.onAuthStateChanged(user =>{
             if(user){
