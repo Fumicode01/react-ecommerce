@@ -1,11 +1,12 @@
 import React from 'react'
 import { makeStyles} from '@material-ui/core/styles';
 import {useSelector, useDispatch} from 'react-redux'
-import { getIsSignedIn} from '../../redux/users/selector'
+import {getIsSignedIn} from "../../redux/users/selector";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import logo from '../../assets/img/icons/logo.png'
 import { push } from 'connected-react-router'
+import { HeaderMenus } from './index';
 
 const useStyles = makeStyles({
     root:{
@@ -28,14 +29,20 @@ const useStyles = makeStyles({
 
 const Header = () => {
     const classes = useStyles();
-    const selector = useSelector(state => state.state)
+    const selector = useSelector(state => state)
     const dispatch = useDispatch();
     const isSignedIn = getIsSignedIn(selector)
+
     return (
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.menuBar}>
                 <Toolbar className={classes.toolBar}>
                     <img src={logo} alt="Logo" width="128px" onClick={() => dispatch(push('/'))} />
+                    {isSignedIn && (
+                        <div className={classes.iconButtons}>
+                            <HeaderMenus />
+                        </div>
+                    )}
                 </Toolbar>
             </AppBar>
         </div>
