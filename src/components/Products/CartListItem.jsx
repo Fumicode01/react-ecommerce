@@ -1,7 +1,11 @@
 import React from 'react'
 import { Divider, ListItem, ListItemText, ListItemAvatar } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
-import {Delete, Icon} from '@material-ui/icons'
+import {Delete} from '@material-ui/icons'
+import {IconButton} from '@material-ui/core'
+import { useSelector } from 'react-redux'
+import {getUserId} from '../../redux/users/selector'
+import {db} from '../../firebase/index'
 
 const useStyles = makeStyles({
     list:{
@@ -20,24 +24,33 @@ const useStyles = makeStyles({
 
 const CartListItem = (props) => {
     const classes = useStyles()
+    const selector = useSelector((state) => state)
+    const uid = getUserId(selector)
+
     const image = props.product.images[0].path
     const name = props.product.name
     const price = props.product.price.toLocaleString();
     const size = props.product.size
+
+    const removeProductFromCart = (id) => {
+        return db.collection('users').doc(uid).collection('cart').doc(id).delete()
+    }
+
     return (
         <>
             <ListItem className={classes.list}>
                 <ListItemAvatar>
-                    <img className={classes.img} src={image} alt="ProductImage" />
+                    <img className={classes.image} src={image} alt="ProductImage" />
                 </ListItemAvatar>
                 <div className={classes.text}>
                     <ListItemText primary = {name} secondary={"Size:" + size} />
                     <ListItemText primary={'$' + price} />
                 </div>
-                <Icon>
+                <IconButton onClick={() => removeProductFromCart(props.product.cartId)}>
                     <Delete />
-                </Icon>
+                </IconButton>
             </ListItem>
+            <Divider />
         </>
     )
 }
