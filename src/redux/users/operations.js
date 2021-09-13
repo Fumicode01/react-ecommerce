@@ -4,6 +4,18 @@ import {auth, db, FirebaseTimestamp} from '../../firebase/index'
 
 
 
+export const addProductToCart = (addedProduct) => {
+    return async (dispatch, getState) => {
+        const uid = getState().users.uid;
+        const cartRef = db.collection('users').doc(uid).collection('cart')
+        addedProduct['cartId'] = cartRef.id;
+        await cartRef.set(addedProduct)
+        dispatch(push('/'))
+    }
+}
+
+
+
 export const resetPassword = (email) => {
     return async (dispatch) => {
         if(email === "") {
