@@ -65,7 +65,7 @@ const HeaderDrawer = (props) => {
                 classes={{paper:classes.drawerPaper}}
                 ModalPorps = {{keepMounted:true}}
                 >
-                    <div>
+                    <div onClose={(e) => props.onClose(e)} onkeyDown={(e) => props.onClose(e)}>
                         <div className={classes.searchField}>
                             <TextInput 
                                 fullWidth={false}
