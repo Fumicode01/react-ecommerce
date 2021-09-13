@@ -1,11 +1,12 @@
 import React,{useState, useEffect, useCallback} from 'react'
-import { useSelector } from 'react-redux'
-import {db} from '../firebase/index'
+import { useDispatch, useSelector } from 'react-redux'
+import {db, FirebaseTimestamp} from '../firebase/index'
 import { makeStyles } from '@material-ui/core/Styles'
 import HTMLReactParser from 'html-react-parser'
 import {ImageSwiper} from '../components/Products'
 import { fetchProducts } from '../redux/products/operations'
 import {SizeTable} from '../components/Products'
+import { addProductToCart } from '../redux/users/operations'
 
 const useStyles = makeStyles((theme) => ({
     sliderBox:{
@@ -48,6 +49,7 @@ const returnCodeToBr = (text) => {
 const ProductDetail = () => {
     const classes = useStyles();
     const selector = useSelector((state) => state);
+    const dispatch = useDispatch();
     const path = selector.router.location.pathname;
     const id = path.split('/product/')[1];
 
@@ -63,6 +65,23 @@ const ProductDetail = () => {
     }, [])
 
 
+    const addProduct = useCallback((selectedSize) =>{
+        const timestamp = FirebaseTimestamp.now();
+        dispatchEvent(addProductToCart({
+            added_at:timestamp,
+            description:product.description,
+            gender:product.gender,
+            images:product.images,
+            name:product.name,
+            price:product.price,
+            productId:product.id,
+            quantity:1,
+            size:selectedSize,
+
+        }))
+    },[product])
+
+
 
 
     return (
@@ -76,7 +95,7 @@ const ProductDetail = () => {
                         <h2 className="u-text__headline">{product.name}</h2>
                         <p className={classes.price}>{product.price.toLocaleString()}</p>
                         <div className="module-spacer--small" />
-                            <SizeTable sizes={product.sizes} />
+                            <SizeTable sizes={product.sizes} addProduct={addProduct} />
                         <div className="module-spacer--small" />
                         <p>{returnCodeToBr(product.description)}</p>
 
